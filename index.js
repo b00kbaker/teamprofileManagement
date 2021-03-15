@@ -1,126 +1,89 @@
 const inquirer = require("inquirer");
-const jest = require("jest");
 const fs = require("fs");
-const util = require("util");
 const Manager = require("./library/manager");
 const Intern = require("./library/intern");
 const Engineer = require("./library/engineer");
+const Employee = require("./library/employee");
+
+const employeesArray=[];
+
+function start(){
+  chooseRole();
+  basicHTML();
+}
 
 function chooseRole() {
-  inquirer.prompt({
+  inquirer.prompt
+  ([
+    {
+      type: "input",
+      name: "name",
+      message: "What is the team member's name?",
+    },
+    {
+      type: "input",
+      name: "ID",
+      message: "What is the employee's ID?",
+    },
+    {
+      type: "input",
+      name: "email",
+      message: "What is the employee's email?",
+    },      
+    
+    {
     type: "list",
     name: "role",
     message: "This employee has what job title?",
-    choices: ["manager", "engineer", "intern"],
-  }).then;
-  if ("manager") {
-    managerOnly();
-  } else if ("engineer") {
-    engineerOnly();
-  } else {
-    internOnly();
-  }
-};
+    choices: ["Manager", "Engineer", "Intern"],
+  }]).then(
+    function ({ name, id, email, role }) {
+      let extraRole = "";
+      if (role === "Engineer"){
+        extraRole = "GitHub username";
+      }else if (role === "Intern"){
+        extraRole = "school name";
+      }else{
+        extraRole = "office number";
+      }
+    },
+    inquirer.prompt([{
+      type: "input",
+      name: "extraRole",
+      message: `Enter team member's ${extraRole}`,
+    },
+    {
+     type: "list",
+     name: "another",
+     message: "Do you want to add another team member?",
+     choices: ["Yes", "No"],
+    }])
+    .then(function({extraRole, another}) {
+      let anotherEmployee;
+      if (role === "Engineer"){
+        anotherEmployee = new Engineer(name, id, email, extraRole);
+      }else if (role === "Intern"){
+        anotherEmployee = new Intern(name, id, email, extraRole);
+      }else{
+        anotherEmployee = new Manager(name, id, email, extraRole);
+      }
+      employeesArray.push(anotherEmployee);
+      addCard(anotherEmployee)
+      .then(function(){
+        if (another === "Yes"){
+          chooseRole();
+        }else{
+          finishFile();
+        }
+     });
+    })
+);
+     
 
-const managerOnly = () => {
-  inquirer.prompt(
-    {
-      type: "input",
-      name: "managerName",
-      message: "What is the manager's name?",
-    },
-    {
-      type: "input",
-      name: "managerID",
-      message: "What is the manager's ID?",
-    },
-    {
-      type: "input",
-      name: "managerEmail",
-      message: "What is the manager's email?",
-    },
-    {
-      type: "input",
-      name: "managerOffice",
-      message: "What is the manager's office number?",
-    },
-
-    addOther()
-  );
-};
-
-const engineerOnly = () => {
-  inquirer.prompt(
-    {
-      type: "input",
-      name: "EngineerName",
-      message: "What is the engineer's name?",
-    },
-    {
-      type: "input",
-      name: "engineerID",
-      message: "What is the engineer's ID?",
-    },
-    {
-      type: "input",
-      name: "engineerEmail",
-      message: "What is the engineer's email?",
-    },
-    {
-      type: "input",
-      name: "Git",
-      message: "What is the engineer's GitHub username?",
-    },
-
-    addOther()
-  );
-};
-
-const internOnly = () => {
-  inquirer.prompt(
-    {
-      type: "input",
-      name: "internName",
-      message: "What is the intern's name?",
-    },
-    {
-      type: "input",
-      name: "internID",
-      message: "What is the intern's ID?",
-    },
-    {
-      type: "input",
-      name: "internEmail",
-      message: "What is the intern's email?",
-    },
-    {
-      type: "input",
-      name: "internSchool",
-      message: "What is the intern's school?",
-    },
-
-    addOther()
-  );
-};
-
-function addOther() {
-  inquirer.prompt({
-    type: "list",
-    name: "another",
-    message: "Do you want to add another team member?",
-    choices: ["Yes", "No"],
-  }).then;
-  if (addOther) {
-    return questions();
-  } else {
-    createHTML();
-  }
-};
-
-
-const createHTML = (answers) =>
+function basicHTML(){
+  const tags =
   `<!DOCTYPE html>
-<html lang="en">
+ <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -182,96 +145,108 @@ const createHTML = (answers) =>
         <h1>My Team</h1>
       </span>
     </nav>
-    <div class="row">
-      <div
-        class="card bg-dark justify-content-center align-items-center"
-        style="width: 18rem"
-      >
-        <div class="col card-header">
-          <h4>Robert Bovee</h4>
-        </div>
+    <div class="row">`;
+    fs.writeFile("team.html", html, function(err){
+      if (err){
+        console.log(err);
+      }
+    });
 
-        <div class="col card-header">
-          <h4>Manager</h4>
-        </div>
+};
 
-        <ul class="list-group list-group-flush text">
-          <li class="list-group-item">ID:</li>
-          <li class="list-group-item">Email:</li>
-          <li class="list-group-item">Office Number:</li>
-        </ul>
+function addCard(employee) {
+ return new Promise (function(resolve, reject){
+   const name = employee.getName();
+   const id = employee.getID();
+   const email = employee.getEmail();
+   const role = emplooyee.getRole();
+   let card = "";
+   if (role === "Engineer"){
+       const GitHub = employee.getGithub();
+       card =`<div
+       class="card bg-dark justify-content-center align-items-center"
+       style="width: 18rem"
+     >
+       <div class="col card-header">
+         <h4>${name}</h4>
+       </div>
+
+       <div class="col card-header">
+         <h4>Engineer</h4>
+       </div>
+
+       <ul class="list-group list-group-flush text">
+         <li class="list-group-item">ID: ${id}</li>
+         <li class="list-group-item">Email: ${email}</li>
+         <li class="list-group-item">GitHub Username: ${GitHub}</li>
+       </ul>
+     </div>`;
+    } else if (role === "Intern")
+    { 
+      const school = employee.getSchool();
+      card = `<div
+      class="card bg-dark justify-content-center align-items-center"
+      style="width: 18rem"
+    >
+      <div class="col card-header">
+        <h4>${name}</h4>
       </div>
-      <div
-        class="card bg-dark justify-content-center align-items-center"
-        style="width: 18rem"
-      >
-        <div class="col card-header">
-          <h4>Brody</h4>
-        </div>
 
-        <div class="col card-header">
-          <h4>Engineer</h4>
-        </div>
-
-        <ul class="list-group list-group-flush text">
-          <li class="list-group-item">ID:</li>
-          <li class="list-group-item">Email:</li>
-          <li class="list-group-item">GitHub:</li>
-        </ul>
+      <div class="col card-header">
+        <h4>Intern</h4>
       </div>
-      <div
-        class="card bg-dark justify-content-center align-items-center"
-        style="width: 18rem"
-      >
-        <div class="col card-header">
-          <h4>Addy</h4>
-        </div>
 
-        <div class="col card-header">
-          <h4>Intern</h4>
-        </div>
-
-        <ul class="list-group list-group-flush text">
-          <li class="list-group-item">ID:</li>
-          <li class="list-group-item">Email:</li>
-          <li class="list-group-item">School:</li>
-        </ul>
+      <ul class="list-group list-group-flush text">
+        <li class="list-group-item">ID: ${id}</li>
+        <li class="list-group-item">Email: ${email}</li>
+        <li class="list-group-item">School Name: ${school}</li>
+      </ul>
+    </div>`;
+    }else {
+      const officeNum = employee.getOffice();
+      card = `<div
+      class="card bg-dark justify-content-center align-items-center"
+      style="width: 18rem"
+    >
+      <div class="col card-header">
+        <h4>${name}</h4>
       </div>
-      <div
-        class="card bg-dark justify-content-center align-items-center"
-        style="width: 18rem"
-      >
-        <div class="col card-header">
-          <h4>Quinn</h4>
-        </div>
 
-        <div class="col card-header">
-          <h4>Intern</h4>
-        </div>
-
-        <ul class="list-group list-group-flush text">
-          <li class="list-group-item">ID:</li>
-          <li class="list-group-item">Email:</li>
-          <li class="list-group-item">School:</li>
-        </ul>
+      <div class="col card-header">
+        <h4>Manager</h4>
       </div>
+
+      <ul class="list-group list-group-flush text">
+        <li class="list-group-item">ID: ${id}</li>
+        <li class="list-group-item">Email: ${email}</li>
+        <li class="list-group-item">Office Number: ${officeNum}</li>
+      </ul>
+    </div>`}
+    fs.appendFile("team.html", card, function(err){
+      if (err){
+        return reject(err);
+      };
+      return resolve();
+    });
+ });
+}   
+
+
+      
+
+function finishFile(){
+ const tags =`
     </div>
   </body>
-</html>
-`;
+</html>`;
 
-function init() {
-  questions().then((answers) => {
-    try {
-      const html = createHTML(answers);
-      fs.writeFileSync("index.html", html);
-      console.log(
-        "You have sucessfully created an index.html file, review for any potential errors."
-      );
-    } catch (error) {
-      console.log(error);
+  fs.appendFile("team.html", html, function(err){
+    if (err){
+      console.log(err);
     }
-  });
+  }); 
+  console.log("View finished file")
+};
 }
 
-chooseRole();
+start();
