@@ -8,8 +8,8 @@ const Employee = require("./library/employee");
 const employeesArray=[];
 
 function start(){
-  chooseRole();
   basicHTML();
+  chooseRole();
 }
 
 function chooseRole() {
@@ -22,7 +22,7 @@ function chooseRole() {
     },
     {
       type: "input",
-      name: "ID",
+      name: "id",
       message: "What is the employee's ID?",
     },
     {
@@ -36,8 +36,7 @@ function chooseRole() {
     name: "role",
     message: "This employee has what job title?",
     choices: ["Manager", "Engineer", "Intern"],
-  }]).then(
-    function ({ name, id, email, role }) {
+  }]).then(function({name, id, email, role}) {
       let extraRole = "";
       if (role === "Engineer"){
         extraRole = "GitHub username";
@@ -77,7 +76,8 @@ function chooseRole() {
         }
      });
     })
-);
+  );
+}
      
 
 function basicHTML(){
@@ -146,12 +146,12 @@ function basicHTML(){
       </span>
     </nav>
     <div class="row">`;
-    fs.writeFile("team.html", html, function(err){
+    fs.writeFile("team.html", tags, function(err){
       if (err){
         console.log(err);
       }
     });
-
+  console.log("Please begin");
 };
 
 function addCard(employee) {
@@ -222,6 +222,7 @@ function addCard(employee) {
         <li class="list-group-item">Office Number: ${officeNum}</li>
       </ul>
     </div>`}
+    console.log("Adding team member");
     fs.appendFile("team.html", card, function(err){
       if (err){
         return reject(err);
@@ -235,18 +236,19 @@ function addCard(employee) {
       
 
 function finishFile(){
- const tags =`
+ const tags = `
     </div>
-  </body>
-</html>`;
 
-  fs.appendFile("team.html", html, function(err){
+   </body>
+  </html>`;
+
+  fs.appendFile("team.html", tags, function(err){
     if (err){
       console.log(err);
     }
   }); 
   console.log("View finished file")
 };
-}
+
 
 start();
