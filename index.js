@@ -24,8 +24,8 @@ const Engineer = require("./library/engineer");
 // WHEN I decide to finish building my team
 // THEN I exit the application, and the HTML is generated -->
 
-function questions() {
-  inquirer.prompt(
+function questions(){
+   return inquirer.prompt([
     {
       type: "input",
       name: "name",
@@ -40,14 +40,16 @@ function questions() {
       type: "input",
       name: "email",
       message: "What is the employee's email?",
-    },
-
-    chooseRole()
-  );
-}
+    }] 
+    ).then(
+      chooseRole()
+    )
+  ;
+};
 
 function chooseRole() {
-  inquirer.prompt({
+  // inquirer.prompt
+  ({
     type: "list",
     name: "role",
     message: "This employee has what job title?",
@@ -60,7 +62,8 @@ function chooseRole() {
   } else {
     internOnly();
   }
-}
+};
+
 const managerOnly = () => {
   inquirer.prompt(
     {
@@ -69,55 +72,55 @@ const managerOnly = () => {
       message: "What is the manager's office number?",
     },
 
-    addOther()
+   addOther()
   );
 };
 
-const engineerOnly = () => {
-  inquirer.prompt(
-    {
-      type: "input",
-      name: "Git",
-      message: "What is the engineer's GitHub username?",
-    },
+// const engineerOnly = () => {
+//   inquirer.prompt(
+//     {
+//       type: "input",
+//       name: "Git",
+//       message: "What is the engineer's GitHub username?",
+//     },
 
-    addOther()
-  );
-};
+//     addOther()
+//   );
+// };
 
-const internOnly = () => {
-  inquirer.prompt(
-    {
-      type: "input",
-      name: "internSchool",
-      essage: "What is the intern's school?",
-    },
+// const internOnly = () => {
+//   inquirer.prompt(
+//     {
+//       type: "input",
+//       name: "internSchool",
+//       message: "What is the intern's school?",
+//     },
 
-    addOther()
-  );
-};
+//     addOther()
+//   );
+// };
 
-function addOther() {
-  inquirer.prompt({
-    type: "list",
-    name: "another",
-    message: "Do you want to add another team member?",
-    choices: ["Yes", "No"],
-  }).then;
-  if ("Yes") {
-    return questions();
-  } else {
-    createHTML();
-  }
-}
+// function addOther() {
+//   inquirer.prompt({
+//     type: "list",
+//     name: "another",
+//     message: "Do you want to add another team member?",
+//     choices: ["Yes", "No"],
+//   }).then;
+//   if (addOther) {
+//     return questions();
+//   } else {
+//     createHTML();
+//   }
+// }
 const createHTML = (answers) =>
   function init() {
     questions().then((answers) => {
       try {
         const html = createHTML(answers);
-        fs.writeFileSync("README.md", html);
+        fs.writeFileSync("index.html", html);
         console.log(
-          "You have sucessfully created a Readme.md file, review for any potential errors."
+          "You have sucessfully created an index.html file, review for any potential errors."
         );
       } catch (error) {
         console.log(error);
@@ -125,4 +128,4 @@ const createHTML = (answers) =>
     });
   };
 
-init();
+questions();

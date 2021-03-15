@@ -7,12 +7,9 @@ class Intern extends Employee {
   }
 
   getSchool(){
-      console.log(this.school);
+    return this.school;
   }
 }
 
-
-
-intern.getSchool();
 
 module.exports = Intern;
