@@ -6,50 +6,8 @@ const Manager = require("./library/manager");
 const Intern = require("./library/intern");
 const Engineer = require("./library/engineer");
 
-// <!-- GIVEN a command-line application that accepts user input
-// WHEN I am prompted for my team members and their information
-// THEN an HTML file is generated that displays a nicely formatted team roster based on user input
-// WHEN I click on an email address in the HTML
-// THEN my default email program opens and populates the TO field of the email with the address
-// WHEN I click on the GitHub username
-// THEN that GitHub profile opens in a new tab
-// WHEN I start the application
-// THEN I am prompted to enter the team manager’s name, employee ID, email address, and office number
-// WHEN I enter the team manager’s name, employee ID, email address, and office number
-// THEN I am presented with a menu with the option to add an engineer or an intern or to finish building my team
-// WHEN I select the engineer option
-// THEN I am prompted to enter the engineer’s name, ID, email, and GitHub username, and I am taken back to the menu
-// WHEN I select the intern option
-// THEN I am prompted to enter the intern’s name, ID, email, and school, and I am taken back to the menu
-// WHEN I decide to finish building my team
-// THEN I exit the application, and the HTML is generated -->
-
-function questions(){
-   return inquirer.prompt([
-    {
-      type: "input",
-      name: "name",
-      message: "What is the team member's name?",
-    },
-    {
-      type: "input",
-      name: "ID",
-      message: "What is the employee's ID?",
-    },
-    {
-      type: "input",
-      name: "email",
-      message: "What is the employee's email?",
-    }] 
-    ).then(
-      chooseRole()
-    )
-  ;
-};
-
 function chooseRole() {
-  // inquirer.prompt
-  ({
+  inquirer.prompt({
     type: "list",
     name: "role",
     message: "This employee has what job title?",
@@ -68,64 +26,252 @@ const managerOnly = () => {
   inquirer.prompt(
     {
       type: "input",
+      name: "managerName",
+      message: "What is the manager's name?",
+    },
+    {
+      type: "input",
+      name: "managerID",
+      message: "What is the manager's ID?",
+    },
+    {
+      type: "input",
+      name: "managerEmail",
+      message: "What is the manager's email?",
+    },
+    {
+      type: "input",
       name: "managerOffice",
       message: "What is the manager's office number?",
     },
 
-   addOther()
+    addOther()
   );
 };
 
-// const engineerOnly = () => {
-//   inquirer.prompt(
-//     {
-//       type: "input",
-//       name: "Git",
-//       message: "What is the engineer's GitHub username?",
-//     },
+const engineerOnly = () => {
+  inquirer.prompt(
+    {
+      type: "input",
+      name: "EngineerName",
+      message: "What is the engineer's name?",
+    },
+    {
+      type: "input",
+      name: "engineerID",
+      message: "What is the engineer's ID?",
+    },
+    {
+      type: "input",
+      name: "engineerEmail",
+      message: "What is the engineer's email?",
+    },
+    {
+      type: "input",
+      name: "Git",
+      message: "What is the engineer's GitHub username?",
+    },
 
-//     addOther()
-//   );
-// };
+    addOther()
+  );
+};
 
-// const internOnly = () => {
-//   inquirer.prompt(
-//     {
-//       type: "input",
-//       name: "internSchool",
-//       message: "What is the intern's school?",
-//     },
+const internOnly = () => {
+  inquirer.prompt(
+    {
+      type: "input",
+      name: "internName",
+      message: "What is the intern's name?",
+    },
+    {
+      type: "input",
+      name: "internID",
+      message: "What is the intern's ID?",
+    },
+    {
+      type: "input",
+      name: "internEmail",
+      message: "What is the intern's email?",
+    },
+    {
+      type: "input",
+      name: "internSchool",
+      message: "What is the intern's school?",
+    },
 
-//     addOther()
-//   );
-// };
+    addOther()
+  );
+};
 
-// function addOther() {
-//   inquirer.prompt({
-//     type: "list",
-//     name: "another",
-//     message: "Do you want to add another team member?",
-//     choices: ["Yes", "No"],
-//   }).then;
-//   if (addOther) {
-//     return questions();
-//   } else {
-//     createHTML();
-//   }
-// }
+function addOther() {
+  inquirer.prompt({
+    type: "list",
+    name: "another",
+    message: "Do you want to add another team member?",
+    choices: ["Yes", "No"],
+  }).then;
+  if (addOther) {
+    return questions();
+  } else {
+    createHTML();
+  }
+};
+
+
 const createHTML = (answers) =>
-  function init() {
-    questions().then((answers) => {
-      try {
-        const html = createHTML(answers);
-        fs.writeFileSync("index.html", html);
-        console.log(
-          "You have sucessfully created an index.html file, review for any potential errors."
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    });
-  };
+  `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <title>Team Info</title>
 
-questions();
+    <style>
+
+      .navbar {
+          background-color:red!important;
+      }  
+
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+
+      .card {
+        padding: 15px;
+        border-radius: 6px;
+        background-color:white !important;
+        color: white;
+        margin: 15px;
+      }
+
+      .card-header {
+          background-color: blue !important;
+      }
+
+      .text {
+        padding: 15px;
+        border-radius: 6px;
+        background-color: whitesmoke;
+        color: black;
+        margin: 15px;
+      }
+
+      .col {
+        flex: 1;
+        text-align: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav
+      class="navbar navbar-dark bg-dark justify-content-center align-items-center"
+    >
+      <span class="navbar-brand mb-0 h1">
+        <h1>My Team</h1>
+      </span>
+    </nav>
+    <div class="row">
+      <div
+        class="card bg-dark justify-content-center align-items-center"
+        style="width: 18rem"
+      >
+        <div class="col card-header">
+          <h4>Robert Bovee</h4>
+        </div>
+
+        <div class="col card-header">
+          <h4>Manager</h4>
+        </div>
+
+        <ul class="list-group list-group-flush text">
+          <li class="list-group-item">ID:</li>
+          <li class="list-group-item">Email:</li>
+          <li class="list-group-item">Office Number:</li>
+        </ul>
+      </div>
+      <div
+        class="card bg-dark justify-content-center align-items-center"
+        style="width: 18rem"
+      >
+        <div class="col card-header">
+          <h4>Brody</h4>
+        </div>
+
+        <div class="col card-header">
+          <h4>Engineer</h4>
+        </div>
+
+        <ul class="list-group list-group-flush text">
+          <li class="list-group-item">ID:</li>
+          <li class="list-group-item">Email:</li>
+          <li class="list-group-item">GitHub:</li>
+        </ul>
+      </div>
+      <div
+        class="card bg-dark justify-content-center align-items-center"
+        style="width: 18rem"
+      >
+        <div class="col card-header">
+          <h4>Addy</h4>
+        </div>
+
+        <div class="col card-header">
+          <h4>Intern</h4>
+        </div>
+
+        <ul class="list-group list-group-flush text">
+          <li class="list-group-item">ID:</li>
+          <li class="list-group-item">Email:</li>
+          <li class="list-group-item">School:</li>
+        </ul>
+      </div>
+      <div
+        class="card bg-dark justify-content-center align-items-center"
+        style="width: 18rem"
+      >
+        <div class="col card-header">
+          <h4>Quinn</h4>
+        </div>
+
+        <div class="col card-header">
+          <h4>Intern</h4>
+        </div>
+
+        <ul class="list-group list-group-flush text">
+          <li class="list-group-item">ID:</li>
+          <li class="list-group-item">Email:</li>
+          <li class="list-group-item">School:</li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>
+`;
+
+function init() {
+  questions().then((answers) => {
+    try {
+      const html = createHTML(answers);
+      fs.writeFileSync("index.html", html);
+      console.log(
+        "You have sucessfully created an index.html file, review for any potential errors."
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  });
+}
+
+chooseRole();
