@@ -1,4 +1,5 @@
 const inquirer = require("inquirer");
+const jest = require("jest");
 const fs = require("fs");
 const util = require("util");
 const Manager = require("./library/manager");
@@ -23,97 +24,105 @@ const Engineer = require("./library/engineer");
 // WHEN I decide to finish building my team
 // THEN I exit the application, and the HTML is generated -->
 
-const questions = () => { 
-    inquirer.prompt(
-      {
-        type: "input",
-        name: "name",
-        message: "What is the team member's name?",
-      },
-      {
-        type: "input",
-        name: "ID",
-        message: "What is the employee's ID?",
-      },
-      {
-        type: "input",
-        name: "email",
-        message: "What is the employee's email?",
-      },      
-)};
-
-const chooseRole = () => {
-    inquirer.prompt(
+function questions() {
+  inquirer.prompt(
     {
-        type: "list",
-        name: "role",
-        message: "This employee has what job title?",
-        choices: ["manager", "engineer", "intern"],
+      type: "input",
+      name: "name",
+      message: "What is the team member's name?",
+    },
+    {
+      type: "input",
+      name: "ID",
+      message: "What is the employee's ID?",
+    },
+    {
+      type: "input",
+      name: "email",
+      message: "What is the employee's email?",
     },
 
-)};
+    chooseRole()
+  );
+}
 
-const addFinished = () => {
-    inquirer.prompt(
-    {
-        type: "list",
-        name: "another",
-        message: "Do you want to add another team member?",
-        choices: ["Yes", "No"],
-    },
-
-)};
-
-
+function chooseRole() {
+  inquirer.prompt({
+    type: "list",
+    name: "role",
+    message: "This employee has what job title?",
+    choices: ["manager", "engineer", "intern"],
+  }).then;
+  if ("manager") {
+    managerOnly();
+  } else if ("engineer") {
+    engineerOnly();
+  } else {
+    internOnly();
+  }
+}
 const managerOnly = () => {
   inquirer.prompt(
     {
-        type: "input",
-        name: "managerOffice",
-        message: "What is the manager's office number?",
-      },     
-)};
+      type: "input",
+      name: "managerOffice",
+      message: "What is the manager's office number?",
+    },
+
+    addOther()
+  );
+};
 
 const engineerOnly = () => {
-    inquirer.prompt(
-     {
-       type: "input",
-       name: "Git",
-       message: "What is the engineer's GitHub username?",
+  inquirer.prompt(
+    {
+      type: "input",
+      name: "Git",
+      message: "What is the engineer's GitHub username?",
     },
-)};    
-  
+
+    addOther()
+  );
+};
+
 const internOnly = () => {
- inquirer.prompt(
+  inquirer.prompt(
     {
       type: "input",
       name: "internSchool",
-       essage: "What is the intern's school?",
+      essage: "What is the intern's school?",
     },
-)};
 
+    addOther()
+  );
+};
 
-
-
-  
-
-
-
-const createHTML = (answers) =>
-  
-
-function init() {
-  questions().then((answers) => {
-    try {
-      const html = createHTML(answers);
-      fs.writeFileSync("README.md", html);
-      console.log(
-        "You have sucessfully created a Readme.md file, review for any potential errors."
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  });
+function addOther() {
+  inquirer.prompt({
+    type: "list",
+    name: "another",
+    message: "Do you want to add another team member?",
+    choices: ["Yes", "No"],
+  }).then;
+  if ("Yes") {
+    return questions();
+  } else {
+    createHTML();
+  }
 }
+const createHTML = (answers) =>
+  function init() {
+    questions().then((answers) => {
+      try {
+        const html = createHTML(answers);
+        fs.writeFileSync("README.md", html);
+        console.log(
+          "You have sucessfully created a Readme.md file, review for any potential errors."
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    });
+  };
 
-init(); 
+init();
