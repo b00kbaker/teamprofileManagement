@@ -158,7 +158,7 @@ function addCard(member) {
     const email = member.getEmail();
     let card = "";
     if (role === "Engineer") {
-      const gitHub = member.getGithub();
+      const GitHub = member.getGithub();
       card = `<div
       class="card bg-dark justify-content-center align-items-center"
       style="width: 18rem"
